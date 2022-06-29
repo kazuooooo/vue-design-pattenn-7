@@ -1,39 +1,34 @@
 <template>
-  <renderless-password
-    :password="input.password"
-    :confirmation="input.confirmation"
-    v-slot="{ matching, complexity, valid }"
-  >
-    <div class="wrapper">
-      <div class="field">
-        <label for="password">Password</label>
-        <input v-model="input.password" id="password" />
-      </div>
-      <div class="field">
-        <label for="confirmation">Confirmation</label>
-        <input v-model="input.confirmation" id="confirmation" />
-      </div>
-      <div class="complexity-field">
-        <div
-          role="password-complexity"
-          class="complexity"
-          :class="complexityStyle(complexity)"
-        />
-      </div>
-      <div class="field">
-        <button :disabled="!valid">Submit</button>
-      </div>
+  <div class="wrapper">
+    <div class="field">
+      <label for="password">Password</label>
+      <input v-model="input.password" id="password" />
     </div>
-    <p>Matches: {{ matching }}</p>
-    <p>Complexity: {{ complexity }}</p>
-    <p>Valid: {{ valid }}</p>
-  </renderless-password>
+    <div class="field">
+      <label for="confirmation">Confirmation</label>
+      <input v-model="input.confirmation" id="confirmation" />
+    </div>
+    <div class="complexity-field">
+      <div
+        role="password-complexity"
+        class="complexity"
+        :class="complexityStyle(complexity)"
+      />
+    </div>
+    <div class="field">
+      <button :disabled="!valid">Submit</button>
+    </div>
+  </div>
+  <p>Matches: {{ matching }}</p>
+  <p>Complexity: {{ complexity }}</p>
+  <p>Valid: {{ valid }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core"
 import { reactive } from "vue"
 import RenderlessPassword from "./components/RenderlessPassword.vue"
+import { usePassword } from "./hooks/usePassword"
 export default defineComponent({
   components: {
     RenderlessPassword,
@@ -43,6 +38,8 @@ export default defineComponent({
       password: "",
       confirmation: "",
     })
+
+    const { matching, complexity, valid } = usePassword(input)
 
     const complexityStyle = (complexity: number) => {
       if (complexity >= 3) {
@@ -59,6 +56,9 @@ export default defineComponent({
     return {
       input,
       complexityStyle,
+      matching,
+      complexity,
+      valid,
     }
   },
 })
