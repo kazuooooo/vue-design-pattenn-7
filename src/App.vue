@@ -2,7 +2,7 @@
   <renderless-password
     :password="input.password"
     :confirmation="input.confirmation"
-    v-slot="{ matching, complexity }"
+    v-slot="{ matching, complexity, valid }"
   >
     <div class="wrapper">
       <div class="field">
@@ -20,9 +20,13 @@
           :class="complexityStyle(complexity)"
         />
       </div>
+      <div class="field">
+        <button :disabled="!valid">Submit</button>
+      </div>
     </div>
     <p>Matches: {{ matching }}</p>
     <p>Complexity: {{ complexity }}</p>
+    <p>Valid: {{ valid }}</p>
   </renderless-password>
 </template>
 

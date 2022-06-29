@@ -35,17 +35,21 @@ export default defineComponent({
     confirmation: {
       type: String,
     },
+    minComplexity: { type: Number, default: 3 },
   },
   setup(props, { slots }) {
     const matching = computed(() =>
       isMatching(props.password, props.confirmation)
     )
     const complexity = computed(() => calcComplexity(props.password))
-
+    const valid = computed(
+      () => complexity.value >= props.minComplexity && matching.value
+    )
     return () =>
       slots.default!({
         matching: matching.value,
         complexity: complexity.value,
+        valid: valid.value,
       })
   },
 })
